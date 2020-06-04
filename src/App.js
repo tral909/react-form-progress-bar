@@ -8,17 +8,19 @@ export default class App extends React.Component {
     this.state = {
       currentStep: 1
     };
+
+    this.stepNames = ['Basic', 'Contacts', 'Avatar', 'Finish'];
   }
 
   handlePreviousStep = () => {
     this.setState(state => ({
-      currentStep: state.currentStep - 1
+      currentStep: state.currentStep > 1 ? state.currentStep - 1 : state.currentStep
     }));
   };
 
   handleNextStep = () => {
     this.setState(state => ({
-      currentStep: state.currentStep + 1
+      currentStep: state.currentStep < this.stepNames.length + 1 ? state.currentStep + 1 : state.currentStep
     }));
   };
 
@@ -29,7 +31,7 @@ export default class App extends React.Component {
         <div className="row">
           <div className="offset-2"></div>
           <div className="col-8">
-            <Steps currentStep={currentStep} />
+            <Steps currentStep={currentStep} stepNames={this.stepNames} />
             <div className="d-flex justify-content-center">
               <button type="button" onClick={this.handlePreviousStep}>
                 Previous
