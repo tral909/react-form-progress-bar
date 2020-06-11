@@ -1,6 +1,6 @@
-import React from "react";
-import Steps from "./Steps";
-import BasicForm from "./forms/BasicForm";
+import React from 'react';
+import Steps from './Steps';
+import BasicForm from './forms/BasicForm';
 
 export default class App extends React.Component {
   constructor() {
@@ -33,16 +33,8 @@ export default class App extends React.Component {
           <div className="offset-2"></div>
           <div className="col-8">
             <Steps currentStep={currentStep} stepNames={this.stepNames} />
-            <BasicForm />
-            <div className="d-flex justify-content-center">
-              <button type="button" onClick={this.handlePreviousStep}>
-                Previous
-              </button>
-              <button type="button" onClick={this.handleNextStep}>
-                Next
-              </button>
-              {currentStep}
-            </div>
+            <BasicForm prevStep={this.handlePreviousStep} nextStep={this.handleNextStep} />
+            {currentStep}
           </div>
         </div>
       </div>

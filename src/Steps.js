@@ -1,5 +1,5 @@
-import React from "react";
-import cn from "classnames";
+import React from 'react';
+import cn from 'classnames';
 
 export default class Steps extends React.Component {
   render() {

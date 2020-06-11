@@ -1,85 +1,63 @@
-import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import React from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-// A custom validation function. This must return an object
-// which keys are symmetrical to our values/initialValues
-
-// const validate = values => {
-//   const errors = {};
-//   if (!values.firstName) {
-//     errors.firstName = 'Required';
-//   } else if (values.firstName.length > 15) {
-//     errors.firstName = 'Must be 15 characters or less';
-//   }
-
-//   if (!values.lastName) {
-//     errors.lastName = 'Required';
-//   } else if (values.lastName.length > 20) {
-//     errors.lastName = 'Must be 20 characters or less';
-//   }
-
-//   if (!values.email) {
-//     errors.email = 'Required';
-//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-//     errors.email = 'Invalid email address';
-//   }
-
-//   return errors;
-// };
-
-const BasicForm = () => {
-  // Pass the useFormik() hook initial form values and a submit function that will
-  // be called when the form is submitted
-  const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-    },
-    //validate,
-    validationSchema: Yup.object({
-      firstName: Yup.string()
-        .max(15, 'Must be 15 characters or less')
-        .required('Required'),
-      lastName: Yup.string()
-        .max(20, 'Must be 20 characters or less')
-        .required('Required'),
-      email: Yup.string()
-        .email('Invalid email address')
-        .required('Required'),
-    }),
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
+const BasicForm = (props) => {
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="firstName">First Name</label>
-      <input name="firstName" {...formik.getFieldProps('firstName')} />
-      {formik.touched.firstName && formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
-      <label htmlFor="lastName">Last Name</label>
-      <input
-        id="lastName"
-        name="lastName"
-        type="text"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.lastName}
-      />
-      {formik.touched.lastName && formik.errors.lastName ? <div>{formik.errors.lastName} </div> : null}
-      <label htmlFor="email">Email Address</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.email}
-      />
-      {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
-      <button type="submit">Submit</button>
-    </form>
+    <Formik
+      initialValues={{ firstName: '', lastName: '', password: '', repeatPassword: '' }}
+      validationSchema={Yup.object({
+        firstName: Yup.string()
+          .min(5, 'Must be 5 characters or more')
+          .required('Required'),
+        lastName: Yup.string()
+          .min(5, 'Must be 5 characters or more')
+          .required('Required'),
+        password: Yup.string()
+          .min(6, 'Must be 6 characters or more')
+          .required('Required'),
+        repeatPassword: Yup.string()
+          .oneOf([Yup.ref('password'), null], "Passwords don't match")
+          .required('Required'),
+      })}
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+          setSubmitting(false);
+        }, 400);
+      }}
+    >
+      <Form noValidate>
+        <div className="form-group">
+          <label htmlFor="firstName">Firstname</label>
+          <Field id="firstName" name="firstName" className="form-control" type="text" />
+          <ErrorMessage name="firstName">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
+        </div>
+        <div className="form-group">
+          <label htmlFor="lastName">Lastname</label>
+          <Field id="lastName" name="lastName" className="form-control" type="text" />
+          <ErrorMessage name="lastName">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <Field id="password" name="password" className="form-control" type="password" />
+          <ErrorMessage name="password">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
+        </div>
+        <div className="form-group">
+          <label htmlFor="repeatPassword">Repeat password</label>
+          <Field id="repeatPassword" name="repeatPassword" className="form-control" type="password" />
+          <ErrorMessage name="repeatPassword">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
+        </div>
+        <div className="d-flex justify-content-center">
+          <button className="btn btn-secondary mr-2" type="button" onClick={props.prevStep}>
+            Previous
+          </button>
+          <button className="btn btn-primary" type="submit" onClick={props.nextStep}>
+            Next
+          </button>
+        </div>
+      </Form>
+    </Formik>
   );
 };
 
