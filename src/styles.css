@@ -58,12 +58,15 @@
 }
 
 form {
-  padding: 0 20%;
+  padding: 0 10%;
 }
 
-form label {
-  margin-top: .5rem;
-  margin-bottom: 0;
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.error {
+  border: 1px solid #FF6565;
 }
 
 .error-msg {
