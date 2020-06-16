@@ -3,25 +3,25 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const ContactsForm = (props) => {
+  const { values: { email, mobile, country, city }, nextStep, prevStep } = props;
   return (
     <Formik
-      initialValues={{ email: '', mobile: '' }}
+      initialValues={{ email, mobile, country, city }}
       validationSchema={Yup.object({
         email: Yup.string()
           .required('Required')
           .email('Invalid email address'),
         mobile: Yup.string()
           .matches(/8[0-9]{3}/, 'Invalid mobile number')
+          .required('Required'),
+        country: Yup.string()
+          .required('Required'),
+        city: Yup.string()
           .required('Required')
       })}
-      onSubmit={values => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          props.nextStep(values);
-        }, 400);
-      }}
+      onSubmit={ values => nextStep(values) }
     >
-      {({ errors, touched }) => (
+      {({ values, errors, touched }) => (
         <Form noValidate>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -35,9 +35,29 @@ const ContactsForm = (props) => {
               className={`form-control ${touched.mobile && errors.mobile ? 'error' : ''}`} />
             <ErrorMessage name="mobile">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
           </div>
+          <div className="form-group">
+            <label htmlFor="country">Country</label>
+            <Field id="country" name="country" as="select"
+              className={`form-control ${touched.country && errors.country ? 'error' : ''}`}>
+              <option value="">Select country</option>
+              <option value="Russia">Russia</option>
+              <option value="Belarus">Belarus</option>
+            </Field>
+            <ErrorMessage name="country">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City</label>
+            <Field id="city" name="city" as="select"
+              className={`form-control ${touched.city && errors.city ? 'error' : ''}`}>
+              <option value="">Select city</option>
+              <option value="Russia">Moscow</option>
+              <option value="Belarus">Minsk</option>
+            </Field>
+            <ErrorMessage name="city">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
+          </div>
 
           <div className="d-flex justify-content-center">
-            <button className="btn btn-secondary mr-2" type="button" onClick={props.prevStep}>
+            <button className="btn btn-secondary mr-2" type="button" onClick={() => prevStep(values)}>
               Previous
             </button>
             <button className="btn btn-primary" type="submit">
@@ -50,14 +70,6 @@ const ContactsForm = (props) => {
   );
 };
 
-// <div className="form-group">
-// <label htmlFor="gender">Gender</label>
-// <Field id="gender" name="gender" as="select" className="form-control">
-//   <option value="">Select gender</option>
-//   <option value="male">Male</option>
-//   <option value="female">Female</option>
-// </Field>
-// <ErrorMessage name="gender">{msg => <div className="error-msg">{msg}</div>}</ErrorMessage>
-// </div>
+//todo make dinamic country and city selection from js files
 
 export default ContactsForm;

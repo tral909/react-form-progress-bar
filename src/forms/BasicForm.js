@@ -9,27 +9,27 @@ const BasicForm = (props) => {
       initialValues={{ firstName, lastName, password, repeatPassword, gender }}
       validationSchema={Yup.object({
         firstName: Yup.string()
-          .min(5, 'Must be 5 characters or more')
+          .min(3, 'Must be 3 characters or more')
           .required('Required'),
         lastName: Yup.string()
-          .min(5, 'Must be 5 characters or more')
+          .min(3, 'Must be 3 characters or more')
           .required('Required'),
         password: Yup.string()
-          .min(6, 'Must be 6 characters or more')
+          .min(3, 'Must be 3 characters or more')
           .required('Required'),
         repeatPassword: Yup.string()
           .oneOf([Yup.ref('password'), null], "Passwords don't match")
           .required('Required')
       })}
       onSubmit={values => {
-        // todo - there is not gender in values - need fix (mb need formik element)
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          nextStep(values);
-        }, 400);
+        nextStep(values);
+        // setTimeout(() => {
+        //   alert(JSON.stringify(values, null, 2));
+        //   nextStep(values);
+        // }, 400);
       }}
     >
-      {({ errors, touched }) => (
+      {({ values, errors, touched }) => (
         <Form noValidate>
           <div className="form-group">
             <label htmlFor="firstName">Firstname</label>
@@ -58,17 +58,17 @@ const BasicForm = (props) => {
           <div className="form-group">
             Gender
             <div className="form-check">
-              <input className="form-check-input" id="male" name="gender" type="radio" value="male" />
+              <Field className="form-check-input" id="male" name="gender" type="radio" value="male" />
               <label className="form-check-label" htmlFor="male">Male</label>
             </div>
             <div className="form-check">
-              <input className="form-check-input" id="female" name="gender" type="radio" value="female" />
+              <Field className="form-check-input" id="female" name="gender" type="radio" value="female" />
               <label className="form-check-label" htmlFor="female">Female</label>
             </div>
           </div>
 
           <div className="d-flex justify-content-center">
-            <button className="btn btn-secondary mr-2" type="button" onClick={prevStep}>
+            <button className="btn btn-secondary mr-2" type="button" onClick={() => prevStep(values)}>
               Previous
             </button>
             <button className="btn btn-primary" type="submit">
